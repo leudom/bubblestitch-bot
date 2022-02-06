@@ -1,16 +1,29 @@
-import os
-import discord
-from discord.ext import commands
+# -*- coding: utf-8 -*-
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
+import os
+from discord.ext import commands
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
-client = commands.Bot(command_prefix="!")
-@client.event
+bot = commands.Bot(command_prefix="$")
+
+@bot.event
 async def on_ready():
-    print("bot is ready")
-@client.event
+    logger.info("Bot is ready")
+
+@bot.event
 async def on_message(message):
-    if message.author != client.user:
-        await message.channel.send(f"Hi du! Ich bin Bubblestitch, dein Fake News Agent!")
-client.run(os.getenv('BOT_TOKEN'))
+    if message.author != bot.user:
+        if message.content.startswith('$'):
+            await bot.process_commands(message)
+        else:
+            await message.channel.send(f"Hi %s! Ich bin Bubblestitch, dein Fake News Agent!" % message.author)
+    
+@bot.command()
+async def test(ctx):
+    await ctx.send('Das war ein Test')
+
+bot.run(os.getenv('BOT_TOKEN'))
