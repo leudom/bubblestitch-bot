@@ -12,39 +12,6 @@ from newspaper import Article
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
-
-"""
-def extract_article(url):
-    article = Article(url)
-    try:
-        article.download()
-        article.parse()
-    except:
-        logger.exception('Article could not be downloaded and parsed', exc_info=True)
-
-    return article.title, article.text
-
-title, body = extract_article(r'https://dietagespresse.com/weil-regierung-es-nicht-hinkriegt-tagespresse-startet-eigene-impflotterie/')
-#print(title)
-#print(body)
-
-def prepare_model_input (title, body):
-    return title + ' ' + body
-
-input_txt = prepare_model_input(title, body)
-print(input_txt)
-
-def predict(endpoint_url, input):
-    payload = {'data': [input]}
-    headers = {'Content-Type':'appliction/json'}
-    r = requests.post(url=endpoint_url,
-                  data=(json.dumps(payload)),
-                  headers=headers)
-    logger.info(r.status_code)
-    logger.info(r.json())
-    return r.json()
-"""
-
 class FakeNewsAgent():
 
     def __init__(self, endpoint_url):
@@ -81,12 +48,4 @@ class FakeNewsAgent():
         logger.info(r.json())
 
         return r.json()
-
-agent = FakeNewsAgent(os.getenv('ENDPOINT_URL'))
-
-url = 'https://dietagespresse.com/weil-regierung-es-nicht-hinkriegt-tagespresse-startet-eigene-impflotterie/'
-json_out = agent.predict(url)
-print(json_out)
-print(type(json_out))
-print(json_out['data'][0])
 
